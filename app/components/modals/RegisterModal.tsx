@@ -36,6 +36,7 @@ const RegisterModal = () => {
     try {
       await axios.post('/api/register', data)
       registerModal.onClose()
+      toast.success('Account created successfully')
     } catch (err: any) {
       toast.error('Something went wrong')
     } finally {
