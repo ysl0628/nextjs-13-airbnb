@@ -48,6 +48,7 @@ export const authOptions: AuthOptions = {
       }
     })
   ],
+  // 設置登入後的頁面
   pages: {
     signIn: '/'
   },
