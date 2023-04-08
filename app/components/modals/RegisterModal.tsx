@@ -3,6 +3,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { signIn } from 'next-auth/react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
 import Modal from './Modal'
@@ -85,7 +86,7 @@ const RegisterModal = () => {
         outline
         label="Continue with Github"
         icon={AiFillGithub}
-        onClick={() => {}}
+        onClick={() => signIn('github')}
       />
       <div
         className="
