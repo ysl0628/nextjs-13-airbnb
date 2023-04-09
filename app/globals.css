@@ -8,6 +8,14 @@ body,
   height: 100%;
 }
 
+/* 設定地圖樣式 */
+.leaflet-bottom,
+.leaflet-control,
+.leaflet-pane,
+.leaflet-top {
+  z-index: 0 !important;
+}
+
 /* 滾動條樣式 */
 ::-webkit-scrollbar {
   width: 6px;
