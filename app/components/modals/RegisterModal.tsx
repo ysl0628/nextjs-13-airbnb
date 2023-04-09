@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { signIn } from 'next-auth/react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -47,10 +47,10 @@ const RegisterModal = () => {
     }
   }
 
-  const toggleModal = () => {
+  const toggleModal = useCallback(() => {
     registerModal.onClose()
     loginModal.onOpen()
-  }
+  }, [loginModal, registerModal])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

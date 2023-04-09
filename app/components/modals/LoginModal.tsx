@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -55,10 +55,10 @@ const LoginModal = () => {
     })
   }
 
-  const toggleModal = () => {
+  const toggleModal = useCallback(() => {
     loginModal.onClose()
     registerModal.onOpen()
-  }
+  }, [loginModal, registerModal])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { signOut } from 'next-auth/react'
 import { AiOutlineMenu } from 'react-icons/ai'
 
@@ -8,6 +8,7 @@ import Avatar from '../Avatar'
 import MenuItem from './MenuItem'
 
 import { SafeUser } from '@/app/types'
+import useRentModal from '@/app/hooks/useRentModal'
 import useLoginModal from '@/app/hooks/useLoginModal'
 import useRegisterModal from '@/app/hooks/useRegisterModal'
 
@@ -16,16 +17,27 @@ interface UserMenuProps {
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+  const rentModal = useRentModal()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpen = () => setIsOpen((isOpen) => !isOpen)
 
+  // 確認是否有登入，有登入則開啟租房 modal
+  // 沒有登入則開啟登入 modal
+  const onRentClick = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen()
+    }
+    // rent modal open
+    rentModal.onOpen()
+  }, [currentUser, loginModal, rentModal])
+
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         <div
-          onClick={() => {}}
+          onClick={onRentClick}
           className="
             hidden
             md:block
@@ -39,7 +51,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             cursor-pointer
           "
         >
-          {currentUser ? `Hi, ${currentUser.name}` : 'Airbnb your home'}
+          Airbnb your home
         </div>
         {/* Menu 和 會員人像 */}
         <div
@@ -89,7 +101,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                 <MenuItem label="我的最愛" onClick={() => {}} />
                 <MenuItem label="我的預定" onClick={() => {}} />
                 <MenuItem label="我的設定" onClick={() => {}} />
-                <MenuItem label="Airbnb My home" onClick={() => {}} />
+                <MenuItem label="Airbnb My home" onClick={rentModal.onOpen} />
                 <hr />
                 <MenuItem label="Logout" onClick={() => signOut()} />
               </>
