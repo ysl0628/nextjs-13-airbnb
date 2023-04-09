@@ -1,4 +1,6 @@
 import React from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+
 import Container from '../Container'
 import CategoryBox from '../CategoryBox'
 
@@ -19,6 +21,14 @@ import { GiCaveEntrance } from 'react-icons/gi'
 import { MdOutlineVilla } from 'react-icons/md'
 
 const Categories = () => {
+  const path = usePathname()
+  const param = useSearchParams()
+  const category = param?.get('category')
+
+  if (path !== '/') {
+    return null
+  }
+
   return (
     <Container>
       <div
@@ -36,7 +46,7 @@ const Categories = () => {
             key={item.label}
             label={item.label}
             icon={item.icon}
-            selected={false}
+            selected={category === item.label}
           />
         ))}
       </div>
@@ -83,7 +93,7 @@ export const categories = [
   {
     label: 'Skiing',
     icon: FaSkiing,
-    description: 'This property has skiing activies!'
+    description: 'This property has skiing actives!'
   },
   {
     label: 'Castles',
