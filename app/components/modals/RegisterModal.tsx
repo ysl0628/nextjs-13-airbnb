@@ -10,12 +10,14 @@ import Modal from './Modal'
 import Button from '../Button'
 import Heading from '../Heading'
 import Input from '../inputs/Input'
+import useLoginModal from '@/app/hooks/useLoginModal'
 import useRegisterModal from '@/app/hooks/useRegisterModal'
 
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub } from 'react-icons/ai'
 
 const RegisterModal = () => {
+  const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -43,6 +45,11 @@ const RegisterModal = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const toggleModal = () => {
+    registerModal.onClose()
+    loginModal.onOpen()
   }
 
   const bodyContent = (
@@ -99,7 +106,7 @@ const RegisterModal = () => {
         <p>
           Already have an account?
           <span
-            onClick={() => {}}
+            onClick={toggleModal}
             className="
               text-neutral-800
               cursor-pointer 

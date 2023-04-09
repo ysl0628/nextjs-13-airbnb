@@ -12,6 +12,7 @@ import Heading from '../Heading'
 import Input from '../inputs/Input'
 
 import useLoginModal from '@/app/hooks/useLoginModal'
+import useRegisterModal from '@/app/hooks/useRegisterModal'
 
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub } from 'react-icons/ai'
@@ -19,6 +20,7 @@ import { AiFillGithub } from 'react-icons/ai'
 const LoginModal = () => {
   const router = useRouter()
   const loginModal = useLoginModal()
+  const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -51,6 +53,11 @@ const LoginModal = () => {
         toast.error(callback.error)
       }
     })
+  }
+
+  const toggleModal = () => {
+    loginModal.onClose()
+    registerModal.onOpen()
   }
 
   const bodyContent = (
@@ -98,16 +105,17 @@ const LoginModal = () => {
         "
       >
         <p>
-          Already have an account?
+          First time using airbnb?
           <span
-            onClick={() => {}}
+            onClick={toggleModal}
             className="
               text-neutral-800
               cursor-pointer 
               hover:underline
             "
           >
-            Log in
+            {' '}
+            Create an account
           </span>
         </p>
       </div>
