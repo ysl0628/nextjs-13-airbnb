@@ -9,6 +9,7 @@ import useRentModal from '@/app/hooks/useRentModal'
 import Modal from './Modal'
 import Heading from '../Heading'
 import CategoryInput from '../inputs/CategoryInput'
+import CountrySelector from '../inputs/CountrySelector'
 
 enum STEPS {
   CATEGORY = 0,
@@ -53,6 +54,7 @@ const RentModal = () => {
   })
 
   const category = watch('category')
+  const location = watch('location')
 
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
@@ -116,6 +118,10 @@ const RentModal = () => {
         <Heading
           title="Where is your place located?"
           subtitle="Enter a location"
+        />
+        <CountrySelector
+          value={location}
+          onChange={(value) => setCustomValue('location', value)}
         />
       </div>
     )
