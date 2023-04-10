@@ -9,6 +9,8 @@ import useRentModal from '@/app/hooks/useRentModal'
 
 import Modal from './Modal'
 import Heading from '../Heading'
+import Counter from '../inputs/Counter'
+import ImageUpload from '../inputs/ImageUpload'
 import CategoryInput from '../inputs/CategoryInput'
 import CountrySelector from '../inputs/CountrySelector'
 
@@ -56,6 +58,9 @@ const RentModal = () => {
 
   const category = watch('category')
   const location = watch('location')
+  const guestCount = watch('guestCount')
+  const bedroomCount = watch('bedroomCount')
+  const bathroomCount = watch('bathroomCount')
 
   const Map = useMemo(
     () => dynamic(() => import('../Map'), { ssr: false }),
@@ -130,6 +135,49 @@ const RentModal = () => {
           onChange={(value) => setCustomValue('location', value)}
         />
         <Map pointer={location?.latlng} />
+      </div>
+    )
+  }
+
+  if (step === STEPS.INFO) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Share some basic about your place?"
+          subtitle="What amenities do you have?"
+        />
+        <Counter
+          title="Guests"
+          subtitle="how many guest?"
+          value={guestCount}
+          onChange={(value) => setCustomValue('guestCount', value)}
+        />
+        <hr />
+        <Counter
+          title="Rooms"
+          subtitle="how many rooms do you have?"
+          value={bedroomCount}
+          onChange={(value) => setCustomValue('bedroomCount', value)}
+        />
+        <hr />
+        <Counter
+          title="Bathrooms"
+          subtitle="how many bathrooms do you have?"
+          value={bathroomCount}
+          onChange={(value) => setCustomValue('bathroomCount', value)}
+        />
+      </div>
+    )
+  }
+
+  if (step === STEPS.IMAGES) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Add some photos of your place"
+          subtitle="Add some photos of your place"
+        />
+        <ImageUpload />
       </div>
     )
   }
