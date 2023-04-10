@@ -58,6 +58,7 @@ const RentModal = () => {
 
   const category = watch('category')
   const location = watch('location')
+  const imagesSrc = watch('imagesSrc')
   const guestCount = watch('guestCount')
   const bedroomCount = watch('bedroomCount')
   const bathroomCount = watch('bathroomCount')
@@ -177,7 +178,10 @@ const RentModal = () => {
           title="Add some photos of your place"
           subtitle="Add some photos of your place"
         />
-        <ImageUpload />
+        <ImageUpload
+          value={imagesSrc}
+          onChange={(value) => setCustomValue('imagesSrc', value)}
+        />
       </div>
     )
   }
