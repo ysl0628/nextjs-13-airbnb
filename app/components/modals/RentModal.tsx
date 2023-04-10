@@ -54,6 +54,7 @@ const RentModal = () => {
       toast.success('Listing created successfully')
       router.refresh()
       reset()
+      rentModal.onClose()
     } catch (error) {
       toast.error('Something went wrong')
     }
@@ -75,7 +76,7 @@ const RentModal = () => {
       price: 1,
       imagesSrc: '',
       guestCount: 1,
-      bedroomCount: 1,
+      roomCount: 1,
       bathroomCount: 1
     }
   })
@@ -83,8 +84,8 @@ const RentModal = () => {
   const category = watch('category')
   const location = watch('location')
   const imagesSrc = watch('imagesSrc')
+  const roomCount = watch('roomCount')
   const guestCount = watch('guestCount')
-  const bedroomCount = watch('bedroomCount')
   const bathroomCount = watch('bathroomCount')
 
   const Map = useMemo(
@@ -181,8 +182,8 @@ const RentModal = () => {
         <Counter
           title="Rooms"
           subtitle="how many rooms do you have?"
-          value={bedroomCount}
-          onChange={(value) => setCustomValue('bedroomCount', value)}
+          value={roomCount}
+          onChange={(value) => setCustomValue('roomCount', value)}
         />
         <hr />
         <Counter
