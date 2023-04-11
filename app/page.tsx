@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 
 import getListings from './actions/getListings'
@@ -22,8 +21,6 @@ export default async function Home() {
       </ClientOnly>
     )
   }
-
-  console.log(listings)
 
   return (
     <ClientOnly>
