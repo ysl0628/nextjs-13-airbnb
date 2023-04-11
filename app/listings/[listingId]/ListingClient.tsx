@@ -4,10 +4,9 @@ import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { Range } from 'react-date-range'
 import { useRouter } from 'next/navigation'
-import { Reservation } from '@prisma/client'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { differenceInCalendarDays, eachDayOfInterval } from 'date-fns'
-import { SafeListings, SafeUser } from '@/app/types'
+import { SafeListings, SafeReservation, SafeUser } from '@/app/types'
 
 import useLoginModal from '@/app/hooks/useLoginModal'
 import Container from '@/app/components/Container'
@@ -23,7 +22,7 @@ const initialDateRange = {
 }
 
 interface ListingClientProps {
-  reservation?: Reservation[]
+  reservations?: SafeReservation[]
   listing: SafeListings & {
     user: SafeUser
   }
@@ -33,16 +32,16 @@ interface ListingClientProps {
 const ListingClient: React.FC<ListingClientProps> = ({
   listing,
   currentUser,
-  reservation = []
+  reservations = []
 }) => {
   const loginModal = useLoginModal()
   const router = useRouter()
 
-  // 過濾掉已經預約的日期或是過去的日期
+  // 過濾掉已經預約的日期
   const disabledDates = useMemo(() => {
     let dates: Date[] = []
 
-    reservation.forEach((reservation) => {
+    reservations.forEach((reservation) => {
       const range = eachDayOfInterval({
         start: new Date(reservation.startDate),
         end: new Date(reservation.endDate)
@@ -52,7 +51,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
     })
 
     return dates
-  }, [reservation])
+  }, [reservations])
 
   const [isLoading, setIsLoading] = useState(false)
   const [dateRange, setDateRange] = useState<Range>(initialDateRange)
