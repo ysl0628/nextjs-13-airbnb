@@ -41,7 +41,7 @@ const RentModal = () => {
     setStep((step) => step - 1)
   }
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     if (step !== STEPS.PRICE) {
       onNext()
       return
@@ -50,13 +50,16 @@ const RentModal = () => {
     setIsLoading(true)
 
     try {
-      axios.post('api/listings', data)
+      await axios.post('api/listings', data)
       toast.success('Listing created successfully')
-      router.refresh()
       reset()
+      router.refresh()
+      setStep(STEPS.CATEGORY)
       rentModal.onClose()
     } catch (error) {
       toast.error('Something went wrong')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -74,7 +77,7 @@ const RentModal = () => {
       title: '',
       description: '',
       price: 1,
-      imagesSrc: '',
+      imageSrc: '',
       guestCount: 1,
       roomCount: 1,
       bathroomCount: 1
@@ -83,7 +86,7 @@ const RentModal = () => {
 
   const category = watch('category')
   const location = watch('location')
-  const imagesSrc = watch('imagesSrc')
+  const imageSrc = watch('imageSrc')
   const roomCount = watch('roomCount')
   const guestCount = watch('guestCount')
   const bathroomCount = watch('bathroomCount')
@@ -204,8 +207,8 @@ const RentModal = () => {
           subtitle="Add some photos of your place"
         />
         <ImageUpload
-          value={imagesSrc}
-          onChange={(value) => setCustomValue('imagesSrc', value)}
+          value={imageSrc}
+          onChange={(value) => setCustomValue('imageSrc', value)}
         />
       </div>
     )
