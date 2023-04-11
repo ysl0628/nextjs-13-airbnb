@@ -21,7 +21,7 @@ model User {
   hashedPassword String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-  favritesIds    String[]  @db.ObjectId
+  favoriteIds    String[]  @db.ObjectId
 
   // 以下為 user 對 accout, listing, reservation 一對多關聯
   // 一個 User 可以有多個 Listing，很多個 Reservation
