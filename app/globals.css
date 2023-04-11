@@ -16,6 +16,15 @@ body,
   z-index: 0 !important;
 }
 
+/* react date calender 樣式 */
+.rdrMonth {
+  width: 100% !important;
+}
+
+.rdrCalendarWrapper {
+  width: 100% !important;
+}
+
 /* 滾動條樣式 */
 ::-webkit-scrollbar {
   width: 6px;
