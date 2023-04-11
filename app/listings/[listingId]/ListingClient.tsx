@@ -1,13 +1,26 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
+import { Range } from 'react-date-range'
+import { useRouter } from 'next/navigation'
 import { Reservation } from '@prisma/client'
-
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { differenceInCalendarDays, eachDayOfInterval } from 'date-fns'
 import { SafeListings, SafeUser } from '@/app/types'
+
+import useLoginModal from '@/app/hooks/useLoginModal'
 import Container from '@/app/components/Container'
 import { categories } from '@/app/components/navbar/Categories'
 import ListingHead from '@/app/components/listings/ListingHead'
 import ListingInfo from '@/app/components/listings/ListingInfo'
+import ListingReservation from '@/app/components/listings/ListingReservation'
+
+const initialDateRange = {
+  startDate: new Date(),
+  endDate: new Date(),
+  key: 'selection'
+}
 
 interface ListingClientProps {
   reservation?: Reservation[]
@@ -19,8 +32,78 @@ interface ListingClientProps {
 
 const ListingClient: React.FC<ListingClientProps> = ({
   listing,
-  currentUser
+  currentUser,
+  reservation = []
 }) => {
+  const loginModal = useLoginModal()
+  const router = useRouter()
+
+  // 過濾掉已經預約的日期或是過去的日期
+  const disabledDates = useMemo(() => {
+    let dates: Date[] = []
+
+    reservation.forEach((reservation) => {
+      const range = eachDayOfInterval({
+        start: new Date(reservation.startDate),
+        end: new Date(reservation.endDate)
+      })
+
+      dates = [...dates, ...range]
+    })
+
+    return dates
+  }, [reservation])
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange)
+  const [totalPrice, setTotalPrice] = useState(listing.price)
+
+  const onCreateReservation = useCallback(async () => {
+    if (!currentUser) {
+      loginModal.onOpen()
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      await axios.post('/api/reservations', {
+        totalPrice,
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
+        listingId: listing?.id
+      })
+
+      toast.success('預約成功')
+      setDateRange(initialDateRange)
+
+      // 跳轉到 /trip
+      // router.push('/trip')
+      router.refresh()
+    } catch (error) {
+      toast.error('預約失敗')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [currentUser, dateRange, listing?.id, loginModal, router, totalPrice])
+
+  useEffect(() => {
+    // 如果有選擇日期，則計算總價格
+    if (dateRange.startDate && dateRange.endDate) {
+      // 計算日期差
+      const dayCount = differenceInCalendarDays(
+        dateRange.endDate,
+        dateRange.startDate
+      )
+
+      if (dayCount && listing.price) {
+        setTotalPrice(dayCount * listing.price)
+      } else {
+        setTotalPrice(listing.price)
+      }
+    }
+  }, [dateRange, listing.price])
+
   const category = useMemo(() => {
     return categories.find((category) => category.label === listing.category)
   }, [listing.category])
@@ -47,6 +130,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
               locationValue={listing.locationValue}
               price={listing.price}
             />
+            <div className="md:col-span-3 order-first mb-10 md:order-last">
+              <ListingReservation
+                price={listing.price}
+                totalPrice={totalPrice}
+                onChangeDate={(value) => setDateRange(value)}
+                dateRange={dateRange}
+                onSubmit={onCreateReservation}
+                disabled={isLoading}
+                disabledDates={disabledDates}
+              />
+            </div>
           </div>
         </div>
       </div>
