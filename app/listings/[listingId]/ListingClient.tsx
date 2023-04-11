@@ -77,8 +77,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       setDateRange(initialDateRange)
 
       // 跳轉到 /trip
-      // router.push('/trip')
-      router.refresh()
+      router.push('/trips')
     } catch (error) {
       toast.error('預約失敗')
     } finally {
