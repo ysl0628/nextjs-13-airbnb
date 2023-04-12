@@ -59,8 +59,10 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             actionId={reservation.id}
             onAction={onCancel}
             disabled={deletingId === reservation.id}
-            actionLabel="取消客戶的預約"
+            actionLabel="取消客戶預約"
             currentUser={currentUser}
+            secondaryActionLabel="訂單明細"
+            onSecondaryAction={() => {}}
           />
         ))}
       </div>

@@ -14,8 +14,10 @@ interface ListingCardProps {
   data: SafeListings
   reservation?: SafeReservation
   onAction?: (id: string) => void
+  onSecondaryAction?: (id: string) => void
   disabled?: boolean
   actionLabel?: string
+  secondaryActionLabel?: string
   actionId?: string
   currentUser?: SafeUser | null
 }
@@ -24,8 +26,10 @@ const ListingCard: React.FC<ListingCardProps> = ({
   data,
   reservation,
   onAction,
+  onSecondaryAction,
   disabled,
   actionLabel,
+  secondaryActionLabel,
   actionId = '',
   currentUser
 }) => {
@@ -44,6 +48,18 @@ const ListingCard: React.FC<ListingCardProps> = ({
       onAction?.(actionId)
     },
     [actionId, disabled, onAction]
+  )
+
+  const handleSecondaryAction = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation()
+
+      if (disabled) {
+        return
+      }
+      onSecondaryAction?.(actionId)
+    },
+    [actionId, disabled, onSecondaryAction]
   )
 
   const price = useMemo(() => {
@@ -102,14 +118,25 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="font-semibold">$ {price}</div>
           {!reservation && <div className="font-light">night</div>}
         </div>
-        {onAction && actionLabel && (
-          <Button
-            disabled={disabled}
-            small
-            label={actionLabel}
-            onClick={handleCancel}
-          />
-        )}
+        <div className="flex flex-col md:flex-row items-center gap-2 justify-between ">
+          {onSecondaryAction && secondaryActionLabel && (
+            <Button
+              disabled={disabled}
+              outline
+              small
+              label={secondaryActionLabel}
+              onClick={handleSecondaryAction}
+            />
+          )}
+          {onAction && actionLabel && (
+            <Button
+              disabled={disabled}
+              small
+              label={actionLabel}
+              onClick={handleCancel}
+            />
+          )}
+        </div>
       </div>
     </div>
   )
