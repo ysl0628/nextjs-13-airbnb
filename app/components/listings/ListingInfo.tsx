@@ -16,6 +16,7 @@ interface ListingInfoProps {
   user: SafeUser
   description: string
   price: number
+  bedCount: number
   roomCount: number
   guestCount: number
   bathroomCount: number
@@ -32,7 +33,7 @@ interface ListingInfoProps {
 const ListingInfo: React.FC<ListingInfoProps> = ({
   user,
   description,
-  price,
+  bedCount,
   roomCount,
   guestCount,
   bathroomCount,
@@ -52,6 +53,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
         <div className="flex items-center gap-4 font-light text-neutral-500">
           <div>{guestCount} guests</div>
           <div>{roomCount} rooms</div>
+          <div>{bedCount} beds</div>
           <div>{bathroomCount} bathrooms</div>
         </div>
       </div>
