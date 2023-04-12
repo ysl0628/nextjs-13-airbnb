@@ -62,6 +62,7 @@ model Listing {
   roomCount     Int
   bathroomCount Int
   guestCount    Int
+  bedCount      Int
   locationValue String
   userId        String   @db.ObjectId
   price         Int
@@ -79,6 +80,13 @@ model Reservation {
   startDate  DateTime
   endDate    DateTime
   totalPrice Int
+  // userName    String
+  // email       String
+  // address     String?
+  // phone       Int?
+  // arrivalTime String
+  // isMainGuest Boolean?
+  // mainGuest   String?
   createdAt  DateTime @default(now())
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
