@@ -104,7 +104,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                   onClick={() => router.push('/trips')}
                 />
                 <MenuItem label="我的最愛" onClick={() => {}} />
-                <MenuItem label="我的預定" onClick={() => {}} />
+                <MenuItem
+                  label="我的預定"
+                  onClick={() => router.push('/reservations')}
+                />
                 <MenuItem label="我的設定" onClick={() => {}} />
                 <MenuItem label="Airbnb My home" onClick={rentModal.onOpen} />
                 <hr />
