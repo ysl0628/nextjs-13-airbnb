@@ -20,7 +20,8 @@ export async function POST(req: Request) {
     bathroomCount,
     guestCount,
     location,
-    price
+    price,
+    bedCount
   } = body
 
   const listing = await prisma.listing.create({
@@ -29,6 +30,7 @@ export async function POST(req: Request) {
       description,
       imageSrc,
       category,
+      bedCount,
       roomCount,
       bathroomCount,
       guestCount,
