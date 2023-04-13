@@ -74,20 +74,21 @@ model Listing {
 }
 
 model Reservation {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String   @db.ObjectId
-  listingId  String   @db.ObjectId
-  startDate  DateTime
-  endDate    DateTime
-  totalPrice Int
-  // userName    String
-  // email       String
-  // address     String?
-  // phone       Int?
-  // arrivalTime String
-  // isMainGuest Boolean?
-  // mainGuest   String?
-  createdAt  DateTime @default(now())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  listingId     String   @db.ObjectId
+  startDate     DateTime
+  endDate       DateTime
+  totalPrice    Int
+  userName      String
+  email         String
+  address       String?
+  phone         String?
+  arrivalTime   String
+  isMainGuest   Boolean?
+  mainGuestName String?
+  message       String?
+  createdAt     DateTime @default(now())
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
