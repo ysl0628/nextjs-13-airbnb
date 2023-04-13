@@ -4,6 +4,7 @@ import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { Range } from 'react-date-range'
 import { useRouter } from 'next/navigation'
+import { FieldValues, useForm } from 'react-hook-form'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { differenceInCalendarDays, eachDayOfInterval } from 'date-fns'
 import { SafeListings, SafeReservation, SafeUser } from '@/app/types'
@@ -57,6 +58,34 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const [dateRange, setDateRange] = useState<Range>(initialDateRange)
   const [totalPrice, setTotalPrice] = useState(listing.price)
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch
+  } = useForm<FieldValues>({
+    defaultValues: {
+      userName: '',
+      email: '',
+      phone: '',
+      address: '',
+      arrivalTime: '',
+      isMainGuest: false,
+      mainGuestName: '',
+      message: ''
+    }
+  })
+
+  const formValue = watch()
+
+  const setFormValue = (id: string, value: string | boolean | number) => {
+    setValue(id, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true
+    })
+  }
   const onCreateReservation = useCallback(async () => {
     if (!currentUser) {
       loginModal.onOpen()
@@ -131,6 +160,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             />
             <div className="md:col-span-3 order-first mb-10 md:order-last">
               <ListingReservation
+                listing={listing}
                 price={listing.price}
                 totalPrice={totalPrice}
                 onChangeDate={(value) => setDateRange(value)}
@@ -138,6 +168,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 onSubmit={onCreateReservation}
                 disabled={isLoading}
                 disabledDates={disabledDates}
+                register={register}
+                formValue={formValue}
+                errors={errors}
+                setFormValue={setFormValue}
               />
             </div>
           </div>
