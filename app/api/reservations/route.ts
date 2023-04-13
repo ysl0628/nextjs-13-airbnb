@@ -11,8 +11,29 @@ export async function POST(req: Request) {
 
   const body = await req.json()
 
-  const { listingId, startDate, endDate, totalPrice } = body
-  if (!listingId || !startDate || !endDate || !totalPrice) {
+  const {
+    listingId,
+    startDate,
+    endDate,
+    totalPrice,
+    userName,
+    phone,
+    email,
+    address,
+    arrivalTime,
+    isMainGuest,
+    mainGuestName,
+    message
+  } = body
+  if (
+    !listingId ||
+    !startDate ||
+    !endDate ||
+    !totalPrice ||
+    !userName ||
+    !email ||
+    !arrivalTime
+  ) {
     return NextResponse.error()
   }
 
@@ -27,7 +48,15 @@ export async function POST(req: Request) {
           userId: currentUser.id,
           startDate,
           endDate,
-          totalPrice
+          totalPrice,
+          userName,
+          phone,
+          email,
+          address,
+          arrivalTime,
+          isMainGuest,
+          mainGuestName,
+          message
         }
       }
     }
