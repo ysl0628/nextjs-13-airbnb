@@ -1,7 +1,7 @@
 import { FieldErrors } from 'react-hook-form'
 import Select from 'react-select'
 
-interface OptionType {
+export interface OptionType {
   value: string | boolean | number
   label: string
 }

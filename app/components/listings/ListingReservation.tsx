@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Range } from 'react-date-range'
 import Calendar from '../inputs/Calendar'
 import Button from '../Button'
@@ -8,6 +8,8 @@ import useReservationModal from '@/app/hooks/useReservationModal'
 import ReservationModal from '../modals/ReservationModal'
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
 import { SafeListings } from '@/app/types'
+import { OptionType } from '../inputs/Selector'
+import { toast } from 'react-hot-toast'
 
 interface ListingReservationProps {
   price: number
@@ -21,7 +23,10 @@ interface ListingReservationProps {
   register: UseFormRegister<FieldValues>
   errors: FieldErrors<FieldValues>
   formValue: FieldValues
-  setFormValue: (id: string, value: string | boolean | number) => void
+  setFormValue: (
+    id: string,
+    value: string | boolean | number | OptionType
+  ) => void
 }
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
@@ -39,6 +44,33 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   setFormValue
 }) => {
   const reservationModal = useReservationModal()
+
+  const isTodayDisabled = useMemo(() => {
+    const today = new Date()
+    const isDisabled = disabledDates?.some((disabledDate) => {
+      return today.getDate() === disabledDate.getDate()
+    })
+
+    const isStartDisabled = disabledDates?.some((disabledDate) => {
+      return dateRange.startDate?.getDate() === disabledDate.getDate()
+    })
+
+    const isEndDisabled = disabledDates?.some((disabledDate) => {
+      return dateRange.endDate?.getDate() === disabledDate.getDate()
+    })
+
+    return (isDisabled && isStartDisabled) || (isDisabled && isEndDisabled)
+  }, [disabledDates, dateRange])
+
+  const onNext = () => {
+    if (isTodayDisabled) {
+      toast.error('選擇的日期不可預訂')
+      return
+    }
+
+    reservationModal.onOpen()
+  }
+
   return (
     <div className="bg-white rounded-xl border-xl border-[1px] border-neutral-200 overflow-hidden">
       <div
@@ -57,11 +89,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       />
       <hr />
       <div className="p-4">
-        <Button
-          label="預約"
-          disabled={disabled}
-          onClick={reservationModal.onOpen}
-        />
+        <Button label="下一步" disabled={disabled} onClick={onNext} />
         <ReservationModal
           listing={listing}
           totalPrice={totalPrice}
