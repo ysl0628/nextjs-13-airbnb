@@ -10,7 +10,7 @@ import useReservationModal from '@/app/hooks/useReservationModal'
 
 import Modal from './Modal'
 import Heading from '../Heading'
-import Selector from '../inputs/Selector'
+import Selector, { OptionType } from '../inputs/Selector'
 import LabelInput from '../inputs/LabelInput'
 
 import {
@@ -28,7 +28,10 @@ interface ReservationModalProps {
   disabled: boolean
   register: UseFormRegister<FieldValues>
   onSubmit: () => void
-  setFormValue: (id: string, value: string | boolean | number) => void
+  setFormValue: (
+    id: string,
+    value: string | boolean | number | OptionType
+  ) => void
 }
 
 const ReservationModal: React.FC<ReservationModalProps> = ({
@@ -79,79 +82,81 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
         </div>
       </div>
       <hr />
-      <div
-        className="flex flex-col gap-4 max-h-[50vh]
-          overflow-y-auto"
-      >
+      <div className="flex flex-col gap-4">
         <Heading title="填寫訂購資料" />
-        <LabelInput
-          id="userName"
-          label="訂購人"
-          register={register}
-          errors={errors}
-          disabled={disabled}
-          required
-        />
-        <LabelInput
-          id="email"
-          label="Email"
-          type="email"
-          register={register}
-          errors={errors}
-          disabled={disabled}
-          required
-        />
-        <LabelInput
-          id="phone"
-          label="電話"
-          register={register}
-          errors={errors}
-          disabled={disabled}
-          required
-        />
-        <LabelInput
-          id="address"
-          label="地址"
-          register={register}
-          errors={errors}
-          disabled={disabled}
-          required
-        />
-        <Selector
-          id="arrivalTime"
-          required
-          errors={errors}
-          label="到達時間"
-          options={[{ label: '3:00 PM ~ 4:00 PM', value: '1' }]}
-          onChange={(value) => setFormValue('arrivalTime', value.label)}
-        />
-        <Selector
-          id="isMainGuest"
-          errors={errors}
-          label="是否為主要入住者"
-          options={[
-            { label: '是', value: true },
-            { label: '否', value: false }
-          ]}
-          onChange={(value) => setFormValue('isMainGuest', value.value)}
-        />
-        {!formValue.isMainGuest && (
+        <div
+          className="flex flex-col gap-4 max-h-[50vh]
+          overflow-y-auto"
+        >
           <LabelInput
-            id="mainGuestName"
-            label="主要入住者姓名"
+            id="userName"
+            label="訂購人"
+            register={register}
+            errors={errors}
+            disabled={disabled}
+            required
+          />
+          <LabelInput
+            id="email"
+            label="Email"
+            type="email"
+            register={register}
+            errors={errors}
+            disabled={disabled}
+            required
+          />
+          <LabelInput
+            id="phone"
+            label="電話"
             register={register}
             errors={errors}
             disabled={disabled}
           />
-        )}
-        <LabelInput
-          type="textarea"
-          id="message"
-          label="備註"
-          register={register}
-          errors={errors}
-          disabled={disabled}
-        />
+          <LabelInput
+            id="address"
+            label="地址"
+            register={register}
+            errors={errors}
+            disabled={disabled}
+            required
+          />
+          <Selector
+            id="arrivalTime"
+            required
+            errors={errors}
+            label="到達時間"
+            options={[{ label: '3:00 PM ~ 4:00 PM', value: '1' }]}
+            onChange={(value) => setFormValue('arrivalTime', value.label)}
+          />
+          <Selector
+            id="isMainGuest"
+            errors={errors}
+            label="是否為主要入住者"
+            placeholder='請選擇 "是" 或 "否"'
+            options={[
+              { label: '是', value: true },
+              { label: '否', value: false }
+            ]}
+            onChange={(value) => setFormValue('isMainGuest', value)}
+          />
+          {!formValue.isMainGuest && (
+            <LabelInput
+              id="mainGuestName"
+              label="主要入住者姓名"
+              register={register}
+              errors={errors}
+              disabled={disabled}
+            />
+          )}
+          <LabelInput
+            type="textarea"
+            id="message"
+            label="備註"
+            register={register}
+            errors={errors}
+            disabled={disabled}
+          />
+        </div>
       </div>
     </div>
   )
@@ -159,7 +164,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
   return (
     <Modal
       onClose={reservationModal.onClose}
-      onSubmit={() => {}}
+      onSubmit={onSubmit}
       actionLabel="確認預約"
       title="預約"
       isOpen={reservationModal.isOpen}
