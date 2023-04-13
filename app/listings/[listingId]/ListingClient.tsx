@@ -10,11 +10,13 @@ import { differenceInCalendarDays, eachDayOfInterval } from 'date-fns'
 import { SafeListings, SafeReservation, SafeUser } from '@/app/types'
 
 import useLoginModal from '@/app/hooks/useLoginModal'
+import useReservationModal from '@/app/hooks/useReservationModal'
 import Container from '@/app/components/Container'
 import { categories } from '@/app/components/navbar/Categories'
 import ListingHead from '@/app/components/listings/ListingHead'
 import ListingInfo from '@/app/components/listings/ListingInfo'
 import ListingReservation from '@/app/components/listings/ListingReservation'
+import { OptionType } from '@/app/components/inputs/Selector'
 
 const initialDateRange = {
   startDate: new Date(),
@@ -35,6 +37,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   currentUser,
   reservations = []
 }) => {
+  const reservationModal = useReservationModal()
   const loginModal = useLoginModal()
   const router = useRouter()
 
@@ -60,7 +63,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setValue,
     watch
@@ -71,7 +73,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       phone: '',
       address: '',
       arrivalTime: '',
-      isMainGuest: false,
+      isMainGuest: true,
       mainGuestName: '',
       message: ''
     }
@@ -79,7 +81,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const formValue = watch()
 
-  const setFormValue = (id: string, value: string | boolean | number) => {
+  const setFormValue = (
+    id: string,
+    value: string | boolean | number | OptionType
+  ) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -96,15 +101,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
     try {
       await axios.post('/api/reservations', {
+        ...formValue,
         totalPrice,
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
-        listingId: listing?.id
+        listingId: listing?.id,
+        isMainGuest: formValue.isMainGuest.value
       })
 
       toast.success('預約成功')
       setDateRange(initialDateRange)
-
+      reservationModal.onClose()
       // 跳轉到 /trip
       router.push('/trips')
     } catch (error) {
@@ -112,7 +119,16 @@ const ListingClient: React.FC<ListingClientProps> = ({
     } finally {
       setIsLoading(false)
     }
-  }, [currentUser, dateRange, listing?.id, loginModal, router, totalPrice])
+  }, [
+    currentUser,
+    reservationModal,
+    dateRange,
+    listing?.id,
+    loginModal,
+    router,
+    totalPrice,
+    formValue
+  ])
 
   useEffect(() => {
     // 如果有選擇日期，則計算總價格

@@ -139,7 +139,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
             ]}
             onChange={(value) => setFormValue('isMainGuest', value)}
           />
-          {!formValue.isMainGuest && (
+          {!formValue.isMainGuest.value && (
             <LabelInput
               id="mainGuestName"
               label="主要入住者姓名"
