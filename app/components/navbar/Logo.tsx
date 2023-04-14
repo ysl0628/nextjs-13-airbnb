@@ -7,14 +7,17 @@ import { useRouter } from 'next/navigation'
 const Logo = () => {
   const route = useRouter()
 
+  // https://github.com/vercel/next.js/issues/40762
+
   return (
     <Image
       onClick={() => route.push('/')}
       alt="logo"
       src="/images/logo.png"
-      className="hidden md:block cursor-pointer"
-      height="100"
-      width="100"
+      className="hidden md:block object-cover cursor-pointer"
+      height={31}
+      width={100}
+      priority
     />
   )
 }
