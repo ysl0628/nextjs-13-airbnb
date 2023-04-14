@@ -35,6 +35,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     rentModal.onOpen()
   }, [currentUser, loginModal, rentModal])
 
+  const onMenuClick = useCallback(
+    (target: string) => {
+      router.push(target || '/')
+      setIsOpen((isOpen) => !isOpen)
+    },
+    [router]
+  )
+
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
@@ -101,19 +109,19 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               <>
                 <MenuItem
                   label="我的旅遊"
-                  onClick={() => router.push('/trips')}
+                  onClick={() => onMenuClick('/trips')}
                 />
                 <MenuItem
                   label="我的最愛"
-                  onClick={() => router.push('/favorites')}
+                  onClick={() => onMenuClick('/favorites')}
                 />
                 <MenuItem
                   label="我的預定"
-                  onClick={() => router.push('/reservations')}
+                  onClick={() => onMenuClick('/reservations')}
                 />
                 <MenuItem
                   label="我的房源"
-                  onClick={() => router.push('/properties')}
+                  onClick={() => onMenuClick('/properties')}
                 />
                 <MenuItem label="Airbnb My home" onClick={rentModal.onOpen} />
                 <hr />
