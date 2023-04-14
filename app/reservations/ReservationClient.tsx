@@ -6,10 +6,12 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
 import { SafeReservation, SafeUser } from '../types'
+import useDetailModal from '../hooks/useDetailModal'
 
 import Heading from '../components/Heading'
 import Container from '../components/Container'
 import ListingCard from '../components/listings/ListingCard'
+import DetailModal from '../components/modals/DetailModal'
 
 interface ReservationClientProps {
   reservations: SafeReservation[]
@@ -21,7 +23,15 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
   currentUser
 }) => {
   const router = useRouter()
+  const detailModal = useDetailModal()
   const [deletingId, setDeletingId] = useState<string>('')
+  const [selectedReservation, setSelectedReservation] =
+    useState<SafeReservation>()
+
+  const onDetailOpen = (reservation: SafeReservation) => {
+    setSelectedReservation(reservation)
+    detailModal.onOpen()
+  }
 
   const onCancel = async (reservationId: string) => {
     setDeletingId(reservationId)
@@ -62,9 +72,14 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             actionLabel="取消客戶預約"
             currentUser={currentUser}
             secondaryActionLabel="訂單明細"
-            onSecondaryAction={() => {}}
+            onSecondaryAction={() => onDetailOpen(reservation)}
           />
         ))}
+        <DetailModal
+          reservation={selectedReservation}
+          onAction={onCancel}
+          deletingId={deletingId}
+        />
       </div>
     </Container>
   )
