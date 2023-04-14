@@ -54,7 +54,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
     : ''
 
   const bodyContent = (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 max-h-[70vh]">
       <div className="flex flex-col gap-3">
         <Heading title="確認訂購資訊" />
         <div className="flex flex-col gap-3">
@@ -82,10 +82,10 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
         </div>
       </div>
       <hr />
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 overflow-y-auto h-[80vh]">
         <Heading title="填寫訂購資料" />
         <div
-          className="flex flex-col gap-4 max-h-[50vh]
+          className="flex flex-col gap-4
           overflow-y-auto"
         >
           <LabelInput
