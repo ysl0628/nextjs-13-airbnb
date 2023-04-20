@@ -1,6 +1,6 @@
 # 訂房網站專案
 
-![Imgur](https://imgur.com/MeVx2rn.gif)
+![Imgur](https://imgur.com/ozwWQjZ.gif)
 
 本專案是一個基於 Next.js 13 app directory 開發的全端模擬 AirBnB 訂房網站，使用 TypeScript 和 TailwindCSS 等技術。並使用 NextAuth.js 進行會員管理，資以 Prisma 作為與 MongoDB 串連的資料庫工具。
 
