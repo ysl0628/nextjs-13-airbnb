@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useCallback, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { signOut } from 'next-auth/react'
 import { AiOutlineMenu } from 'react-icons/ai'
 
@@ -12,6 +13,8 @@ import useRentModal from '@/app/hooks/useRentModal'
 import useLoginModal from '@/app/hooks/useLoginModal'
 import useRegisterModal from '@/app/hooks/useRegisterModal'
 import { useRouter } from 'next/navigation'
+
+import { AiFillWarning } from 'react-icons/ai'
 
 interface UserMenuProps {
   currentUser: SafeUser | null
@@ -29,6 +32,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   // 沒有登入則開啟登入 modal
   const onRentClick = useCallback(() => {
     if (!currentUser) {
+      toast('請先登入', {
+        icon: <AiFillWarning color="#ffbb33" />
+      })
       return loginModal.onOpen()
     }
     // rent modal open
