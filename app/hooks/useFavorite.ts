@@ -39,7 +39,12 @@ const useFavorite = ({ currentUser, listingId }: IFavorite) => {
 
         await request()
         router.refresh()
-        toast.success('成功')
+
+        toast.promise(request(), {
+          loading: 'loading...',
+          success: '成功',
+          error: 'error occurs in data'
+        })
       } catch (error) {
         toast.error('Something went wrong')
       }
